@@ -1,18 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "remixicon/fonts/remixicon.css";
 
 const Note01 = () => {
     const [Name, setName] = useState("");
     const [desc, setdesc] = useState("");
     const [Output, setOutput] = useState([]);
+    const [isEdit, setisEdit] = useState(false);
+    const [editId, seteditId] = useState(null);
+
+    // localStorage Part
+    // localStorage.removeItem("notes");  use it earlier in console if local storage use any extra/ bad data at first
+
+    useEffect(()=>{
+        const saveNote = JSON.parse(localStorage.getItem("notes"));
+        if(saveNote){
+            setOutput(saveNote);
+        }
+    }, []);
+
+    useEffect(()=>{
+        localStorage.setItem("notes", JSON.stringify(Output));
+    }, [Output]);
 
     function submitHandler(e) {
         e.preventDefault();
+
         if (Name.trim() === "") {
             alert("give your name frist");
             return;
         }
-        setOutput([...Output, { Name, desc }]);
+
+        if(isEdit){
+            let updateList = Output.map((elem, listId)=>{
+                if(listId == editId){
+                    return {...elem, Name, desc};  // means the updated part is worked, what I changed there
+                }
+                return elem;
+            });
+
+            setOutput(updateList);
+            setisEdit(false);
+            setisEdit(null);
+        }
+        else{
+            setOutput([...Output, { Name, desc }]);
+        }
         setName("");
         setdesc("");
     }
@@ -21,6 +53,16 @@ const Note01 = () => {
         let arr = [...Output];
         arr.splice(idx, 1);
         setOutput(arr);
+    }
+
+    function editHandler(idx){
+        let editName = Output[idx].Name;
+        let editDesc = Output[idx].desc;
+
+        setName(editName);
+        setdesc(editDesc);
+        setisEdit(true);
+        seteditId(idx);
     }
 
     return (
@@ -52,9 +94,15 @@ const Note01 = () => {
             <div className='h-1/2 w-2/3  bg-red-950  border-white px-3 py-4 rounded-xl flex flex-row items-center justify-start gap-5 overflow-x-auto overflow-y-hidden scrollbar-hide'>
                 {Output.map((elem, idx) => {
                     return <div className='text-red-900 px-5 py-3 h-67 min-w-57 max-w-57 bg-red-800 border-10 border-double border-white rounded-xl flex flex-col overflow-y-auto scrollbar-hide'>
-                        <i
+                        <div className='ml-auto'>
+                            <i onClick={()=> editHandler(idx)} 
+                            className="ri-edit-2-line text-xl text-white cursor-pointer mx-3"></i>
+
+                            <i
                             onClick={() => deleteHandler(idx)}
-                            className="ri-delete-bin-line ml-auto text-xl text-white cursor-pointer"></i>
+                            className="ri-delete-bin-line text-xl text-white cursor-pointer"></i>
+
+                        </div>
                         <h1 className='text-3xl font-bold text-amber-400 text-center pb-3'>{elem.Name}</h1>
                         <p className='text-xs text-white'>{elem.desc}</p>
                     </div>
@@ -64,4 +112,4 @@ const Note01 = () => {
     )
 }
 
-export default Note01
+export default Note01;
