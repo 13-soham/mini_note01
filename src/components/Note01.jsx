@@ -66,8 +66,8 @@ const Note01 = () => {
     }
 
     return (
-        <div className='h-screen w-full bg-linear-to-r/hsl from-red-950 to-red-500 px-15 py-10 flex flex-row gap-20'>
-            <div className='h-1/2 w-1/3 bg-red-800 border-2 border-white px-3 py-4 overflow-hidden rounded-xl'>
+        <div className='h-screen w-full bg-linear-to-r/hsl from-red-950 to-red-500 px-15 py-10 flex flex-col md:flex-row md:gap-20 gap-6'>
+            <div className='w-full md:w-1/3 md:h-1/2 bg-red-800 border-2 border-white px-3 py-4 overflow-hidden rounded-xl mb-4 md:mb-0'>
                 <form
                     onSubmit={(e) => {
                         submitHandler(e);
@@ -91,9 +91,9 @@ const Note01 = () => {
                     <button className='text-xl text-red-900 font-semibold bg-white text-center border-2 border-black py-2 rounded-xl cursor-pointer transition-all duration-150 active:scale-98'>submit</button>
                 </form>
             </div>
-            <div className='h-1/2 w-2/3  bg-red-950  border-white px-3 py-4 rounded-xl flex flex-row items-center justify-start gap-5 overflow-x-auto overflow-y-hidden scrollbar-hide'>
+            <div className='w-full md:w-2/3 md:h-1/2 bg-red-950 border-white px-3 py-4 rounded-xl flex flex-row md:flex-row items-start md:items-center justify-start gap-5 overflow-x-auto md:overflow-x-auto overflow-y-hidden scrollbar-hide'>
                 {Output.map((elem, idx) => {
-                    return <div className='text-red-900 px-5 py-3 h-67 min-w-57 max-w-57 bg-red-800 border-10 border-double border-white rounded-xl flex flex-col overflow-y-auto scrollbar-hide'>
+                    return <div className='text-red-900 px-5 py-3 md:h-67 h-auto w-auto min-w-[220px] md:min-w-57 md:max-w-57 md:w-auto bg-red-800 border-10 border-double border-white rounded-xl flex flex-col overflow-y-auto scrollbar-hide'>
                         <div className='ml-auto'>
                             <i onClick={()=> editHandler(idx)} 
                             className="ri-edit-2-line text-xl text-white cursor-pointer mx-3"></i>
